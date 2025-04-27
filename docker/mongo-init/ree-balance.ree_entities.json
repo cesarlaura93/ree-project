@@ -1,0 +1,53 @@
+[{
+  "_id": {
+    "$oid": "680d6b8c2f23031c84116bba"
+  },
+  "energy_type": "Renovable",
+  "device_types": [
+    "Hidráulica",
+    "Eólica",
+    "Solar fotovoltaica",
+    "Solar térmica",
+    "Otras renovables",
+    "Residuos renovables",
+    "Generación renovable"
+  ]
+},
+{
+  "_id": {
+    "$oid": "680d6b8c2f23031c84116bbb"
+  },
+  "energy_type": "No-Renovable",
+  "device_types": [
+    "Nuclear",
+    "Ciclo combinado",
+    "Carbón",
+    "Motores diésel",
+    "Turbina de gas",
+    "Turbina de vapor",
+    "Cogeneración",
+    "Residuos no renovables",
+    "Generación no renovable"
+  ]
+},
+{
+  "_id": {
+    "$oid": "680d6b8c2f23031c84116bbc"
+  },
+  "energy_type": "Almacenamiento",
+  "device_types": [
+    "Turbinación bombeo",
+    "Consumo bombeo",
+    "Saldo almacenamiento"
+  ]
+},
+{
+  "_id": {
+    "$oid": "680d6b8c2f23031c84116bbd"
+  },
+  "energy_type": "Demanda",
+  "device_types": [
+    "Saldo I. internacionales",
+    "Demanda en b.c."
+  ]
+}]

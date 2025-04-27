@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+
+  mongo:
+    image: mongodb/mongodb-community-server:latest
+    container_name: ree-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+      - ./mongo-init/init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - ./mongo-init/ree-balance.electric_balance.json:/docker-entrypoint-initdb.d/ree-balance.electric_balance.json
+      - ./mongo-init/ree-balance.ree_entities.json:/docker-entrypoint-initdb.d/ree-balance.ree_entities.json
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+    networks:
+      - ree-network
+
+networks:
+  ree-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
