@@ -15,7 +15,7 @@ export class GetElectricBalanceUseCase {
    */
   async execute(startDate: Date, endDate: Date, energyType?: string): Promise<ElectricBalanceDTO[]> {
     try {
-      this.logger.log(`Fetching electric balance data from ${startDate} to ${endDate}`);
+      this.logger.log(`Obteniendo los documents de balance data desde ${startDate} hasta ${endDate}`);
       
       // Validar fechas
       if (startDate > endDate) {
@@ -24,11 +24,11 @@ export class GetElectricBalanceUseCase {
 
       const data = await this.electricBalanceRepository.findByDateRange(startDate, endDate, energyType);
       
-      this.logger.log(`Found ${data.length} records`);
+      this.logger.log(`Encontrados ${data.length} registros`);
       
       return data;
     } catch (error) {
-      this.logger.error(`Error fetching electric balance data: ${error.message}`);
+      this.logger.error(`Error obteniendo electric balance data: ${error.message}`);
       throw error;
     }
   }
@@ -36,15 +36,15 @@ export class GetElectricBalanceUseCase {
   //Obtiene datos de balance eléctrico por fecha específica 
   async executeByDate(date: Date): Promise<ElectricBalanceDTO[]> {
     try {
-      this.logger.log(`Fetching electric balance data for ${date}`);
+      this.logger.log(`Obteniendo electric balance data para ${date}`);
       
       const data = await this.electricBalanceRepository.findByDate(date);
       
-      this.logger.log(`Found ${data.length} records for date ${date}`);
+      this.logger.log(`Encontrados ${data.length} registros para la fecha ${date}`);
       
       return data;
     } catch (error) {
-      this.logger.error(`Error fetching electric balance data by date: ${error.message}`);
+      this.logger.error(`Error obteniendo electric balance data para la fecha: ${error.message}`);
       throw error;
     }
   }

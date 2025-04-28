@@ -7,6 +7,7 @@ import { FetchElectricBalanceUseCase } from 'src/core/application/use-cases/fetc
 import { HttpREEApiRepository } from 'src/infrastructure/adapters/repositories/http-ree-api.repository';
 import { MongoElectricBalanceRepository } from 'src/infrastructure/adapters/repositories/mongo-electric-balance.repository';
 import { ElectricBalance, ElectricBalanceSchema } from 'src/infrastructure/database/schemas/electric-balance.schema';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -15,6 +16,10 @@ import { ElectricBalance, ElectricBalanceSchema } from 'src/infrastructure/datab
     MongooseModule.forFeature([
       { name: ElectricBalance.name, schema: ElectricBalanceSchema }
     ]),
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: '.env',
+    }),
   ],
   providers: [
     SchedulerService,

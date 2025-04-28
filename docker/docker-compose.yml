@@ -2,6 +2,38 @@ version: '3.8'
 
 services:
 
+  backend:
+    build: 
+      context: ../ree-backend
+      dockerfile: Dockerfile
+    container_name: ree-backend
+    ports:
+      - "8080:8080"
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/ree-balance
+      - NODE_ENV=production
+      - REE_API_BASE_URL=https://apidatos.ree.es/es/datos/balance/balance-electrico
+      - REE_API_TIMEOUT=10000
+      - REE_API_RETRY_ATTEMPTS=3
+      - REE_API_DAYS_LAG=3
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - ree-network
+
+  #frontend:
+    #build:
+    #  context: ../ree-frontend
+    #  dockerfile: Dockerfile
+    #container_name: ree-frontend
+    #ports:
+    #  - "80:80"
+    #depends_on:
+    #  - backend
+    #networks:
+    #  - ree-network
+
   mongo:
     image: mongodb/mongodb-community-server:latest
     container_name: ree-mongo

@@ -1,24 +1,29 @@
 import { Injectable, Logger, Inject } from '@nestjs/common';
 import { REEApiRepository } from 'src/core/domain/repositories/ree-api.repository';
 import { ElectricBalanceRepository } from 'src/core/domain/repositories/electric-balance.repository';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class FetchElectricBalanceUseCase {
     private readonly logger = new Logger(FetchElectricBalanceUseCase.name);
+    private readonly daysLag: number
     
     constructor(
         @Inject('REEApiRepository') private readonly reeApiRepository: REEApiRepository,
         @Inject('ElectricBalanceRepository') private readonly electricBalanceRepository: ElectricBalanceRepository,
-    ) { }
+        private readonly configService: ConfigService,
+    ) {
+        this.daysLag = this.configService.get<number>('environment.reeApi.daysLag') || 3;
+    }
 
     async execute(): Promise<void> {
-        this.logger.log('Iniciando proceso de obtención del balance eléctrico');
+        this.logger.log(`Iniciando proceso de obtención del balance eléctrico, días de lag: ${this.daysLag}`);
         
         try {
             // Obtener la fecha y hora actuales
             const now = new Date();
             const yesterday = new Date(now);
-            yesterday.setDate(now.getDate() - 2);
+            yesterday.setDate(now.getDate() - this.daysLag);
 
             //const startDateStr = "2024-05-01T00:00"//yesterday.toISOString().slice(0, 10) + 'T00:00';
             const startDateStr = yesterday.toISOString().slice(0, 10) + 'T00:00';

@@ -13,6 +13,7 @@ export default registerAs('environment', () => ({
         baseUrl: process.env.REE_API_BASE_URL || 'https://apidatos.ree.es/es/datos/balance/balance-electrico',
         timeout: parseInt(process.env.REE_API_TIMEOUT || '30000', 10),
         retryAttempts: parseInt(process.env.REE_API_RETRY_ATTEMPTS || '3', 10),
+        daysLag: parseInt(process.env.REE_API_DAYS_LAG || '3', 10),
     },
     scheduler: {
         enabled: process.env.SCHEDULER_ENABLED === 'true',

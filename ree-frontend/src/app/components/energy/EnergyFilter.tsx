@@ -10,7 +10,19 @@ import {
   FormControl,
   InputLabel,
   SelectChangeEvent,
+  CircularProgress,
+  Typography,
 } from "@mui/material";
+import { gql, useQuery } from "@apollo/client";
+
+const GET_ENERGY_TYPES = gql`
+  query ReeEntities {
+    reeEntities {
+      energyType
+      deviceTypes
+    }
+  }
+`;
 
 export function EnergyFilter() {
   const router = useRouter();
@@ -18,41 +30,53 @@ export function EnergyFilter() {
   const [energyType, setEnergyType] = useState<string>("all");
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [types, setTypes] = useState<string[]>([]);
-  const handleFilterChange = (name: string, value: string) => {
+
+  const { loading, error, data } = useQuery(GET_ENERGY_TYPES);
+
+  const handleFilterChange = (name: string, value: string | null) => {
     const params = new URLSearchParams(window.location.search);
-    params.set(name, value);
+    if (value) {
+      params.set(name, value);
+    } else {
+      params.delete(name);
+    }
     router.replace(`${pathname}?${params.toString()}`);
   };
-
-  useEffect(() => {
-    fetch("/api/energy/types")
-      .then((res) => res.json())
-      .then((data) => setTypes(data))
-      .catch((error) => console.error("Error:", error));
-  }, []);
 
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <FormControl fullWidth>
-          <InputLabel>Tipo de Energía</InputLabel>
+          <InputLabel>Tipo de Energías</InputLabel>
           <Select
             value={energyType}
             label="Tipo de Energía"
             onChange={(e: SelectChangeEvent) => {
               const value = e.target.value;
               setEnergyType(value);
-              handleFilterChange("energyType", value);
+              handleFilterChange("energyType", value === "all" ? null : value);
             }}
+            disabled={loading || !!error}
           >
             <MenuItem value="all">Todos</MenuItem>
-            <MenuItem value="Renovable">Renovable</MenuItem>
-            <MenuItem value="No Renovable">No Renovable</MenuItem>
-            <MenuItem value="Biomasa">Biomasa</MenuItem>
-            <MenuItem value="Geotérmica">Geotérmica</MenuItem>
-            <MenuItem value="Nuclear">Nuclear</MenuItem>
-            <MenuItem value="Marina">Marina</MenuItem>
+            {loading && <MenuItem value="loading" disabled><CircularProgress size={20} /></MenuItem>}
+            {error && (
+              <MenuItem value="error" disabled>
+                <Typography color="error">
+                  Error al cargar tipos: {error.message}
+                  {error.networkError && error.networkError.result && error.networkError.result.errors && (
+                    <pre style={{ whiteSpace: 'pre-wrap', fontSize: 12 }}>
+                      {JSON.stringify(error.networkError.result.errors, null, 2)}
+                    </pre>
+                  )}
+                </Typography>
+              </MenuItem>
+            )}
+            {data && data.reeEntities && data.reeEntities.map((entity: { energyType: string }) => (
+              <MenuItem key={entity.energyType} value={entity.energyType}>
+                {entity.energyType}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
 
@@ -61,8 +85,7 @@ export function EnergyFilter() {
           value={startDate}
           onChange={(newValue) => {
             setStartDate(newValue);
-            if (newValue)
-              handleFilterChange("startDate", newValue.toISOString());
+            handleFilterChange("startDate", newValue ? newValue.toISOString().split('T')[0] : null);
           }}
           slotProps={{ textField: { fullWidth: true } }}
         />
@@ -72,9 +95,10 @@ export function EnergyFilter() {
           value={endDate}
           onChange={(newValue) => {
             setEndDate(newValue);
-            if (newValue) handleFilterChange("endDate", newValue.toISOString());
+            handleFilterChange("endDate", newValue ? newValue.toISOString().split('T')[0] : null);
           }}
           slotProps={{ textField: { fullWidth: true } }}
+          minDate={startDate || undefined}
         />
       </div>
     </LocalizationProvider>

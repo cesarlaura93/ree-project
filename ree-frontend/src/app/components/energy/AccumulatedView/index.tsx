@@ -3,6 +3,7 @@ import { EnergyFilter } from "../EnergyFilter";
 import { ValueChart } from "./ValueChart";
 import { PercentageChart } from "./PercentageChart";
 import { EnergyData } from "@/types/energy";
+import YearMonthFilter from "../YearMotnFilter";
 
 async function getEnergyData(params: {
   energyType?: string;
@@ -46,7 +47,7 @@ export default function AccumulatedView({
 }) {
   return (
     <section className="space-y-8">
-      <EnergyFilter />
+      <YearMonthFilter />
 
       <Suspense fallback={<div>Cargando datos acumulados...</div>}>
         <AccumulatedCharts searchParams={searchParams} />
