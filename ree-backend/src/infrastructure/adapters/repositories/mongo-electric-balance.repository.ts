@@ -14,8 +14,6 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     private readonly electricBalanceModel: Model<ElectricBalanceDocument>,
   ) {}
 
-  // Inserta o actualiza múltiples registros de balance eléctrico
-  // Usa la combinación de date + energy_type + device_type como clave única
   async saveMany(electricBalances: ElectricBalanceDTO[]): Promise<void> {
     const bulkOperations = electricBalances.map(balance => ({
       updateOne: {
@@ -49,9 +47,6 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     }
   }
 
-  /**
-   * Encuentra registros por rango de fechas
-   */
   async findByDateRange(startDate: Date, endDate: Date, energyType?: string): Promise<ElectricBalanceDTO[]> {
     this.logger.debug(`Buscando registros por rango de fechas: ${startDate.toISOString()} - ${endDate.toISOString()}`);
     // Sumar 1 día a endDate para incluir todo el día en el filtro
@@ -62,7 +57,7 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     const filter: any = {
       date: {
         $gte: startDate,
-        $lt: nextDay, // menor estricto para incluir todo endDate
+        $lt: nextDay,
       },
     };
     if (energyType) {
@@ -77,12 +72,7 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     return documents.map(doc => this.mapToEntity(doc));
   }
 
-  /**
-   * Encuentra registros por fecha específica
-   */
   async findByDate(date: Date): Promise<ElectricBalanceDTO[]> {
-
-
     const startOfDay = new Date(date);
     startOfDay.setUTCHours(0, 0, 0, 0);
     
@@ -92,9 +82,6 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     return this.findByDateRange(startOfDay, endOfDay);
   }
 
-  /**
-   * Obtiene estadísticas agregadas por tipo de energía para un rango de fechas
-   */
   async getAggregatedByEnergyType(startDate: Date, endDate: Date) {
     return this.electricBalanceModel.aggregate([
       {
@@ -128,9 +115,6 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     ]);
   }
 
-  /**
-   * Obtiene el último registro para cada combinación de tipo de energía y dispositivo
-   */
   async getLatestByTypes() {
     return this.electricBalanceModel.aggregate([
       {
@@ -166,7 +150,7 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     endYear: number,
     endMonth: number
   ): Promise<ElectricBalanceMonthlyDTO[]> {
-    // Calcular fechas de inicio y fin
+    // Calcula fechas de inicio y fin
     const startDate = new Date(Date.UTC(startYear, startMonth - 1, 1, 0, 0, 0, 0));
     const endDate = new Date(Date.UTC(endYear, endMonth, 1, 0, 0, 0, 0)); // Primer día del mes siguiente
   

@@ -10,14 +10,10 @@ export class GetElectricBalanceUseCase {
     @Inject('ElectricBalanceRepository') private readonly electricBalanceRepository: ElectricBalanceRepository,
   ) {}
 
-  /**
-   * Obtiene datos de balance eléctrico por rango de fechas
-   */
   async execute(startDate: Date, endDate: Date, energyType?: string): Promise<ElectricBalanceDTO[]> {
     try {
       this.logger.log(`Obteniendo los documents de balance data desde ${startDate} hasta ${endDate}`);
       
-      // Validar fechas
       if (startDate > endDate) {
         throw new Error('Start date must be before end date');
       }

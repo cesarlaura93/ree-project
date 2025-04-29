@@ -16,23 +16,26 @@ services:
       - REE_API_TIMEOUT=10000
       - REE_API_RETRY_ATTEMPTS=3
       - REE_API_DAYS_LAG=3
+      - PORT=8080
     depends_on:
       mongo:
         condition: service_healthy
     networks:
       - ree-network
 
-  #frontend:
-    #build:
-    #  context: ../ree-frontend
-    #  dockerfile: Dockerfile
-    #container_name: ree-frontend
-    #ports:
-    #  - "80:80"
-    #depends_on:
-    #  - backend
-    #networks:
-    #  - ree-network
+  frontend:
+    build:
+      context: ../ree-frontend
+      dockerfile: Dockerfile
+    container_name: ree-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_GRAPHQL_API_URL=http://ree-backend:8080/graphql
+    depends_on:
+      - backend
+    networks:
+      - ree-network
 
   mongo:
     image: mongodb/mongodb-community-server:latest

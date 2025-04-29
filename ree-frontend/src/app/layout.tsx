@@ -1,4 +1,12 @@
-import { ApolloWrapper } from "./ApolloWrapper";
+import React from 'react';
+import type { Metadata } from 'next';
+import { Providers } from '@/lib/providers';
+import './globals.css';
+
+export const metadata: Metadata = {
+  title: 'Dashboard Balance Eléctrico REE',
+  description: 'Visualización de datos del balance eléctrico de REE',
+};
 
 export default function RootLayout({
   children,
@@ -6,9 +14,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es">
       <body>
-        <ApolloWrapper>{children}</ApolloWrapper>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

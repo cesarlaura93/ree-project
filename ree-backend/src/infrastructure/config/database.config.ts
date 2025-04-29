@@ -18,7 +18,7 @@ export default registerAs('database', (): MongooseModuleOptions => ({
     },
     retryAttempts: 5,
     retryDelay: 5000,
-    // Configuraciones adicionales para producción
+    // Configuraciones adicionales para produccion
     ...(process.env.NODE_ENV === 'production' && {
         authSource: 'admin',
         user: process.env.MONGODB_USER,
@@ -26,7 +26,7 @@ export default registerAs('database', (): MongooseModuleOptions => ({
     }),
 }));
 
-// Tipos auxiliares para la configuración
+
 export interface DatabaseConfig {
     uri: string;
     autoIndex: boolean;
