@@ -14,21 +14,21 @@ El pipeline de datos es un componente "Cron" de NestJS que se encarga de la extr
 
 Esta colección tiene los siguientes campos:
 
-| Campo | Descripción |
-| --- | --- |
-| `date` | Fecha del registro, hay uno por cada día |
-| `energy_type` | Tipo de energía |
-| `device_type` | Tipo de dispositivo |
-| `value` | Valor del balance |
-| `percentage` | Porcentaje del balance |
+| Campo         | Descripción                              |
+| ------------- | ---------------------------------------- |
+| `date`        | Fecha del registro, hay uno por cada día |
+| `energy_type` | Tipo de energía                          |
+| `device_type` | Tipo de dispositivo                      |
+| `value`       | Valor del balance                        |
+| `percentage`  | Porcentaje del balance                   |
 
 > Nota: El pipeline se ejecuta cada minuto, según la configuración del cronjob, actualiza el documento del dia en ejecución.
 
 Adicional a esta colección, se tiene la colección `ree_entities` que contiene los tipos de energía y dispositivo.
 
-| Campo | Descripción |
-| --- | --- |
-| `energy_type` | Tipo de energía |
+| Campo         | Descripción         |
+| ------------- | ------------------- |
+| `energy_type` | Tipo de energía     |
 | `device_type` | Tipo de dispositivo |
 
 Esto sirve para poder filtrar los registros desde el frontend.
@@ -44,12 +44,13 @@ docker-compose -f docker/docker-compose.yml build
 ```
 
 - Backend:
-    - Se compila el proyecto y genera el bundle.
-    - Se crea la imagen del backend.
+
+  - Se compila el proyecto y genera el bundle.
+  - Se crea la imagen del backend.
 
 - Frontend:
-    - Se compila el proyecto y genera el bundle.
-    - Se crea la imagen del frontend.
+  - Se compila el proyecto y genera el bundle.
+  - Se crea la imagen del frontend.
 
 ## Ejecución del sistema
 
@@ -60,17 +61,20 @@ docker-compose -f docker/docker-compose.yml up
 ```
 
 Con esto se realiza lo siguente:
+
 - MongoDB:
-    - Se descarga la imagen de MongoDB
-    - Se crea el contenedor
-    - Se inicia el contenedor
-    - Se restauran las 2 colecciones de la base de datos.
+
+  - Se descarga la imagen de MongoDB
+  - Se crea el contenedor
+  - Se inicia el contenedor
+  - Se restauran las 2 colecciones de la base de datos.
 
 - Backend:
-    - Se crea/levanta el contenedor
+
+  - Se crea/levanta el contenedor
 
 - Frontend:
-    - Se crea/levanta el contenedor
+  - Se crea/levanta el contenedor
 
 > Nota: Se tiene como backup de la base de datos el archivo `backup/ree-balance.electric_balance.json` y `backup/ree-balance.ree_entities.json`. El primero contiene los registros de balance eléctrico desde Abril del 2024, aunque no todos los dispositivos tienen registros.
 
@@ -91,7 +95,8 @@ El proyecto cuenta con pruebas unitarias automatizadas tanto para el frontend co
 Las pruebas se pueden ejecutar mediante Docker, utilizando el mismo archivo docker-compose.yml con el perfil "test":
 
 ```bash
-# Ejecutar todas las pruebas (frontend y backend)
+
+### Ejecutar todas las pruebas (frontend y backend)
 docker-compose -f docker/docker-compose.yml --profile test up
 
 # Ejecutar solo pruebas del backend
