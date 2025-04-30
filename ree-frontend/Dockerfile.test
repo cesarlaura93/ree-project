@@ -1,0 +1,20 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiar archivos de dependencias
+COPY package*.json ./
+COPY jest.config.js ./
+COPY jest.setup.js ./
+COPY tsconfig*.json ./
+
+# Instalar dependencias
+RUN npm ci
+
+# Copiar código fuente
+COPY src ./src
+COPY public ./public
+COPY next.config.ts ./
+
+# Ejecutar pruebas
+CMD ["npm", "test"]

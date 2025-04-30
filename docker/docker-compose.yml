@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
 
+  # Servicios principales
   backend:
     build: 
       context: ../ree-backend
@@ -55,6 +56,40 @@ services:
       start_period: 40s
     networks:
       - ree-network
+      
+  # Servicios de testing
+  test-backend:
+    build: 
+      context: ../ree-backend
+      dockerfile: Dockerfile.test
+    container_name: ree-backend-test
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/ree-balance-test
+      - NODE_ENV=test
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - ree-network
+    volumes:
+      - ../ree-backend/coverage:/app/coverage
+    profiles:
+      - test
+
+  test-frontend:
+    build:
+      context: ../ree-frontend
+      dockerfile: Dockerfile.test
+    container_name: ree-frontend-test
+    environment:
+      - NEXT_PUBLIC_GRAPHQL_API_URL=http://backend:8080/graphql
+      - NODE_ENV=test
+    networks:
+      - ree-network
+    volumes:
+      - ../ree-frontend/coverage:/app/coverage
+    profiles:
+      - test
 
 networks:
   ree-network:

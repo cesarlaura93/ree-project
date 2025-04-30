@@ -78,3 +78,32 @@ Con esto se realiza lo siguente:
 
 demo
 ![Demo](documentation/demo.gif)
+
+## Pruebas Unitarias
+
+El proyecto cuenta con pruebas unitarias automatizadas tanto para el frontend como para el backend. Las pruebas cubren:
+
+- **Backend**: Ingesta de datos y API GraphQL
+- **Frontend**: Componentes y lógica de React
+
+### Ejecución de pruebas
+
+Las pruebas se pueden ejecutar mediante Docker, utilizando el mismo archivo docker-compose.yml con el perfil "test":
+
+```bash
+# Ejecutar todas las pruebas (frontend y backend)
+docker-compose -f docker/docker-compose.yml --profile test up
+
+# Ejecutar solo pruebas del backend
+docker-compose -f docker/docker-compose.yml --profile test up test-backend
+
+# Ejecutar solo pruebas del frontend
+docker-compose -f docker/docker-compose.yml --profile test up test-frontend
+```
+
+Los informes de cobertura se generan automáticamente y se guardan en los directorios `ree-frontend/coverage` y `ree-backend/coverage` respectivamente.
+
+### Estructura de pruebas
+
+- **Frontend**: Las pruebas se encuentran en directorios `__tests__` dentro de las carpetas de componentes.
+- **Backend**: Las pruebas de NestJS siguen la convención `.spec.ts` y se ubican junto a los archivos que prueban.
