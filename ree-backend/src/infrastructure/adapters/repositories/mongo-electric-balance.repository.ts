@@ -49,7 +49,7 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
 
   async findByDateRange(startDate: Date, endDate: Date, energyType?: string): Promise<ElectricBalanceDTO[]> {
     this.logger.debug(`Buscando registros por rango de fechas: ${startDate.toISOString()} - ${endDate.toISOString()}`);
-    // Sumar 1 día a endDate para incluir todo el día en el filtro
+    
     const nextDay = new Date(endDate);
     nextDay.setUTCDate(nextDay.getUTCDate() + 1);
     nextDay.setUTCHours(0, 0, 0, 0);
@@ -150,9 +150,9 @@ export class MongoElectricBalanceRepository implements ElectricBalanceRepository
     endYear: number,
     endMonth: number
   ): Promise<ElectricBalanceMonthlyDTO[]> {
-    // Calcula fechas de inicio y fin
+
     const startDate = new Date(Date.UTC(startYear, startMonth - 1, 1, 0, 0, 0, 0));
-    const endDate = new Date(Date.UTC(endYear, endMonth, 1, 0, 0, 0, 0)); // Primer día del mes siguiente
+    const endDate = new Date(Date.UTC(endYear, endMonth, 1, 0, 0, 0, 0)); 
   
     const documents = await this.electricBalanceModel.aggregate([
       {

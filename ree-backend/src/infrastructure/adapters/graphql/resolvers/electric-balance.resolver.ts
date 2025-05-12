@@ -34,9 +34,9 @@ export class ElectricBalanceResolver {
   @Query(() => [ElectricBalanceMonthlyModel], { name: 'monthlySumByType' })
   async getMonthlySumByType(
     @Args('startYear') startYear: number,
-    @Args('startMonth') startMonth: number, // 1-12
+    @Args('startMonth') startMonth: number, 
     @Args('endYear') endYear: number,
-    @Args('endMonth') endMonth: number // 1-12
+    @Args('endMonth') endMonth: number 
   ): Promise<ElectricBalanceMonthlyModel[]> {
     const data = await this.getElectricBalanceUseCase.executeMonthlySumByType(startYear, startMonth, endYear, endMonth);
     return this.mapToMonthlyElectricBalanceModel(data);
